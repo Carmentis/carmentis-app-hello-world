@@ -1,0 +1,7 @@
+.idea
+node_modules
+public/assets/js/carmentis**
+.env
+applicationSdk.mjs
+package-lock.json
+core
