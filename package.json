@@ -31,6 +31,7 @@
     "express-fileupload": "^1.4.3",
     "formidable": "^3.5.1",
     "html-minifier": "^4.0.0",
+    "https": "^1.0.0",
     "level": "^8.0.0",
     "marked": "^4.2.12",
     "meow": "^12.1.0",

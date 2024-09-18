@@ -10,3 +10,14 @@
 .sender, .date {
     color: rgb(98, 96, 96);
 }
+
+
+#wallet.found, #operator.found {
+    background-color: #06b57b;
+    color: white;
+}
+
+#wallet.missing, #operator.missing {
+    background-color: #b50620;
+    color: white;
+}

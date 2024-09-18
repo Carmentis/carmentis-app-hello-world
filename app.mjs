@@ -1,11 +1,11 @@
 import express from 'express'
 const app = express()
 import cors from 'cors';
-const port = 3000
 import bodyParser from 'body-parser';
-import * as sdk from "./applicationSdk.mjs";
+import * as sdk from "./carmentis-application-sdk.js";
 import * as config     from "./config.mjs";
 
+const port = config.APPLICATION_PORT
 
 class Message {
     constructor(sender, date, message) {
@@ -26,14 +26,17 @@ let messages = [
 let messageWaitingForApproval = {}
 
 sdk.initialize({
-    host: config.OPERATOR_HOST,
-    port: config.OPERATOR_PORT
+    host: config.CARMENTIS_OPERATOR_HOST,
+    port: config.CARMENTIS_OPERATOR_PORT,
 });
+
+const OPERATOR_URL = `${config.CARMENTIS_OPERATOR_HOST}:${config.CARMENTIS_OPERATOR_PORT}`;
 
 // Define the CORS options
 const corsOptions = {
-    origin: ['https://mysite.local', 'https://testapps.carmentis.io']
+    origin: ['https://' + config.CARMENTIS_OPERATOR_HOST],
 };
+console.info("CORS Allowed origins:", corsOptions.origin)
 app.use(cors(corsOptions));
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,7 +46,10 @@ app.set("view engine", "pug")
 
 
 app.get('/', (req, res) => {
-    res.render('index', { title: 'Hey', message: 'Hello there!', messages: messages});
+    res.render('index', {
+        operator_url: OPERATOR_URL,
+        messages: messages
+    });
 })
 
 app.post("/submitMessage", async (req, res) => {
@@ -68,8 +74,8 @@ app.post("/submitMessage", async (req, res) => {
 
     let data =
         {
-            application: config.FA_APPLICATION_ID,
-            version: config.FA_APPLICATION_VERSION,
+            application: config.CARMENTIS_APPLICATION_ID,
+            version: config.CARMENTIS_APPLICATION_VERSION,
             fields: field,
             actors: [
                 {
@@ -125,7 +131,8 @@ app.get("/approval", (req, res) => {
     let params = req.query
     res.render("approval", {
         id: params["id"],
-        recordId: params["recordId"]
+        recordId: params["recordId"],
+        operator_url: OPERATOR_URL,
     })
 })
 
@@ -137,7 +144,9 @@ app.get("/success", (req, res) => {
         delete messageWaitingForApproval[transaction_id]
         messages.push(message)
     }
-    res.render("success")
+    res.render("success", {
+        operator_url: OPERATOR_URL,
+    })
 })
 
 app.listen(port, () => {
