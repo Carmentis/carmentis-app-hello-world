@@ -1,0 +1,12 @@
+#messageForm {
+    background-color: #06b57b;
+    padding: 10px;
+}
+
+#messageForm button {
+    background-color: white;
+}
+
+.sender, .date {
+    color: rgb(98, 96, 96);
+}

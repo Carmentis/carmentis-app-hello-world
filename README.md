@@ -9,7 +9,8 @@ We have designed this application as a frictionless tutorial, in which you will 
 
 
 ## Motivation
-TODO
+The goal is to construct a publicly-available messaging board, in which anyone can post a message, later being 
+displayed in the public board. Your published message is tied with your wallet and hence, with your (Carmentis) identity. 
 
 ## Installation
 Before to dive in all the technical details, several parts have to be carefully installed.
@@ -23,7 +24,8 @@ TODO
 TODO
 
 
-### 
+### Preparing all the necessary pieces of data
+- OrganizationID ?
 
 ## ToDo
 - [ ] Compile the application-sdk instead of building it using core (from Source). 

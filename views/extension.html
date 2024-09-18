@@ -1,0 +1,12 @@
+<a id="carmentis-link" style="display: none" onclick="(window.carmentisWallet !== undefined ? window.carmentisWallet.openPopup(document.querySelector('[data-code]')?.getAttribute('data-code')) : {}); return false"
+   href="#">Use the extension</a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            if (window.carmentisWallet !== undefined) {
+                document.getElementById('carmentis-link').style.display = 'inline';
+            }
+        }, 200);
+    });
+</script>

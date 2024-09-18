@@ -1,12 +1,14 @@
 html
     head
-        title= title
+        title Hello World - Success
+        include styles
     body
-        h1= message
-        // Modal Body
-        .modal-body
-            h1 C'est fait !
+        include navbar
 
-    script(src="assets/js/carmentis-debug-app.min.js")
-    script(src="assets/js/carmentis-nodejs-sdk.js")
-        script(src="assets/js/first-app.js")
+        .container
+            h2 Success
+
+            p Your message has been approved by the operator and integrated in the system.
+            a(href="/")
+                button.btn.btn-info Back to Home
+
