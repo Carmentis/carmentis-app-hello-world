@@ -37,6 +37,7 @@ sdk.initialize({
 // configure the dependencies (express, body-parser to recover parameters, CORS)
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 app.use(cors({
     origin: ['https://' + config.CARMENTIS_OPERATOR_HOST],
 }));
@@ -59,9 +60,16 @@ app.post("/submitMessage", async (req, res) => {
     let now = new Date();
     let date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
 
-    // check if all fields pressent
-    if (!sender || !message) {
-        res.redirect("/")
+    // check if all fields present
+    if (!sender) {
+        console.debug("[DBG] Missing 'sender' field in the request")
+        res.status(401).send(JSON.stringify({"error": "missing 'sender' field in the request."}));
+        return;
+    }
+
+    if (!message) {
+        console.debug("[DBG] Missing 'message' field in the request")
+        res.status(401).send(JSON.stringify({"error": "missing 'message' field in the request."}));
         return;
     }
 
@@ -103,8 +111,7 @@ app.post("/submitMessage", async (req, res) => {
             }
         }
 
-        console.log(data);
-    let answer = await sdk.query( // premier appel vers operat
+    let answer = await sdk.query(
         "prepareUserApproval",
         data
     );
@@ -122,8 +129,12 @@ app.post("/submitMessage", async (req, res) => {
     // store the message even if it is not approved yet
     messageWaitingForApproval[id] = new Message(sender, date, message);
 
-
-    res.redirect(`/approval?id=${id}&recordId=${recordId}`);
+    console.log("[DBG] approval request validated: sending response for user validation.")
+    res.send(JSON.stringify({
+        id: id,
+        recordId: recordId,
+    }));
+    //res.redirect(`/approval?id=${id}&recordId=${recordId}`);
 })
 
 app.get("/approval", (req, res) => {

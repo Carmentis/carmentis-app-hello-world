@@ -7,19 +7,19 @@ html
         include navbar
 
         #messageForm.container
-            form(role='form' method='POST' action='/submitMessage')
+            .form(role='form' method='POST' action='/submitMessage')
                 .row
                     .col-6
                         div.form-group
-                            label(for='name') Sender:
-                            input#name.form-control(type='text', placeholder='Sender' name='sender' required)
+                            label(for='sender') Sender:
+                            input#sender.form-control(type='text', placeholder='Sender' name='sender' required)
                     .col-6
                         div.form-group
                             label(for='message') Message:
                             input#message.form-control(type="message", placeholder='Message' name='message' required)
                 .row
                     .col
-                        button.btn(type="submit", name="asdf") Submit
+                        button#submit.btn Submit
 
         .container
             h2 Messages

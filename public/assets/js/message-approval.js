@@ -1,7 +1,43 @@
 // TODO The organisation's id is no more significant and will be removed.
 const ORGANIZATION_ID = "0000000000000000000000000000000000000000000000000000000000000000";
 
+async function startApproval() {
+    // load the data from the fields
+    const sender = document.getElementById("sender").value;
+    const message = document.getElementById("message").value;
 
+    // load the URL of the operator
+    const operatorURL = document.getElementById("operatorURL").value;
+
+    // send the approval request to the application
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/submitMessage", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = async function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            console.log(xhr.response)
+            let id = xhr.response.id;
+            let success = await Carmentis.web.openApprovalPopup({
+                id: id,
+                operatorURL: `https://${operatorURL}`
+            })
+
+            console.log(success)
+        }
+    }
+    xhr.send(JSON.stringify({
+        sender: sender,
+        message: message,
+    }))
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Start load message-approval")
+    let submitButton = document.getElementById("submit");
+    submitButton.addEventListener("click", startApproval)
+})
+
+/*
 window.onload = async function() {
     // TODO verifier le nom de la transaction.
     let id = document.getElementById("transaction-id").textContent;
@@ -21,3 +57,4 @@ window.onload = async function() {
         window.location = `/success?transaction-id=${id}`
     }
 }
+*/
