@@ -72,7 +72,7 @@ rename the duplicated file as `.env`. Only two variables has to be modified, nam
 
 > [!NOTE]
 > The `CARMENTIS_APPLICATION_ID` and `CARMENTIS_APPLICATION_VERSION` values are displayed in your workspace
-> ([here](https://data.testapps.carmentis.io/workspace)) in your application under the `Overview` section.
+> ([here](https://data.testapps.carmentis.io/workspace/applications)) in your application under the `Overview` section.
 
 ### Step 6: Launching the application server
 Launching the NodeJS web server (which is our application) is done with the following command:
