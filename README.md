@@ -14,21 +14,50 @@ displayed in the public board.
 ## Installation
 Before to dive in all the technical details, several parts have to be carefully installed.
 
-### Installing NodeJS
+### Step 1: Installing NodeJS
+This "Hello World" application has been developed using NodeJS that should be installed in your system. The installation
+of NodeJS (as well as `npm`) depends on your system in configuration, we refer to the official NodeJS installation page 
+([here](http:s//https://nodejs.org/en/download/package-manager)).
 
-
-### Installing Wallet of Carmentis
+### Step 2: Installing Wallet of Carmentis
 To agree on the sending of your message, you will relies on digital signature, authenticating the message your are sending
 in the board. Don't worry, in this tutorial and even the others, no signature key pair generation is required, it is
 completely transparent for you, thanks to the [wallet of Carmentis](https://docs.carmentis.io/).
 
-The wallet of carmentis takes the form of an extension in your browser, from which every approval steps is based.
-We refer you to the installation guide ([here](https://docs.carmentis.io/)) to install the wallet in your favorite browser.
+The wallet of Carmentis takes the form of an extension in your browser, from which every approval steps is based.
+We refer you to the installation guide ([here](https://docs.carmentis.io/docs/wallet)) to install the wallet in your favorite browser.
 
-### Launching the application server
+
+### Step 3: Configuring the Wallet
+Once installed, you have to create your personal account (which is ultimately your signature key pair). Again, we refer
+you to the wallet configuration page in the documentation ([here](https://docs.carmentis.io/docs/wallet/configuration)).
+To verify that your account has been successfully created, try to authenticate yourself at login page of Carmentis ([here](https://data.testapps.carmentis.io/workspace/sign-in)).
+
+### Step 4: Create your application in the Carmentis workspace
+To interact with the system of Carmentis (including the already running operator, the blockchain and so on), it is 
+necessary to declare your application in your [personnal workspace](https://data.testapps.carmentis.io/workspace).
+Note that if you are not logged in already, you will be automatically redirected to the login page.
+
+In the workspace page, observe on the left the "Applications" section as shown below:
+![carmentis-workspace](resources/workspace-nav.png)
+Create a new application using the `New` button and insert a name of your choice (the name you provide is not relevant).
+For simplicity, assume that our application is called "Hello World".
+A new row describing your freshly created application should appear.  Click in the Edit field as shown below:
+![carmentis-list-applications](resources/list-applications.png)
+
+
+### Step 5: Configuring the environment variables
+In the `.env.example` file, some variables has to be modified carefully. First, duplicate the `.env.example` file and 
+rename the duplicated file as `.env`. 
+
+### Step 6: Launching the application server
 Launching the NodeJS web server (which is our application) is done with the following command:
 ```shell
+# On Linux
 nmp install && node app.mjs
+
+# On Windows
+TODO
 ```
 
 You can observe that everything works by looking at the address specified in the `.env` file (by default, it is `http://localhost:80`).
