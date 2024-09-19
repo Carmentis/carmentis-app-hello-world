@@ -64,12 +64,11 @@ app.post("/submitMessage", async (req, res) => {
         return;
     }
 
+    // The fields declared in the workspace page (https://data.testapps.carmentis.io/workspace) are used below.
     let field = {
         Sender: sender,
         Date: date,
-        Message: {
-            Content: message,
-        }
+        Message: message
     };
 
     let data =

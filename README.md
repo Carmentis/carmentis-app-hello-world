@@ -38,7 +38,7 @@ To interact with the system of Carmentis (including the already running operator
 necessary to declare your application in your [personnal workspace](https://data.testapps.carmentis.io/workspace).
 Note that if you are not logged in already, you will be automatically redirected to the login page.
 
-In the workspace page, observe on the left the "Applications" section as shown below:
+Observe on the left of the workspace page, the "Applications" section as shown below:
 ![carmentis-workspace](resources/workspace-nav.png)
 Create a new application using the `New` button and insert a name of your choice (the name you provide is not relevant).
 For simplicity, assume that our application is called "Hello World".
@@ -46,9 +46,33 @@ A new row describing your freshly created application should appear.  Click in t
 ![carmentis-list-applications](resources/list-applications.png)
 
 
+At this point, your application is declared to Carmentis, but you must specify now *what* Carmentis is supposed to deal with,
+namely your data. For the "Hello World" application, three (public) fields have to be declared:
+- `Date` of type `string`
+- `Sender` of type `string`
+- `Message` of type `string`
+
+To declare these three fields, go to the `Fields` section and for each of them, click on `New Field`, enter the name of 
+the field (**Note: every field's name is case-sensitive**), made it public by clicking on `Public Data` and finalize
+using the `Confirm` button. Once all fields have been declared, you should obtain the following (the order of the variables is not relevant):
+![carmentis-workspace-application-fields](resources/application-fields.png)
+
+Then, click on `Publish` to finalize the declaration of the application. In the `Overview` section is displayed the 
+ID of your application as well as the version number.
+
+> [!NOTE]
+> The ID of your application is set once and never change. Nevertheless, you are still allowed to apply modification
+> to your application: The publication of an updated application leads to an incrementation of the application's version 
+> number. To use the updated application, only update the version number to match the latest version.
+
+
 ### Step 5: Configuring the environment variables
 In the `.env.example` file, some variables has to be modified carefully. First, duplicate the `.env.example` file and 
-rename the duplicated file as `.env`. 
+rename the duplicated file as `.env`. Only two variables has to be modified, namely `CARMENTIS_APPLICATION_ID` and `CARMENTIS_APPLICATION_VERSION`.
+
+> [!NOTE]
+> The `CARMENTIS_APPLICATION_ID` and `CARMENTIS_APPLICATION_VERSION` values are displayed in your workspace
+> ([here](https://data.testapps.carmentis.io/workspace)) in your application under the `Overview` section.
 
 ### Step 6: Launching the application server
 Launching the NodeJS web server (which is our application) is done with the following command:
@@ -67,12 +91,10 @@ Once in your browser, observe the "Operator" and "Wallet" notifications, which s
 
 ## ToDo
 - [X] Compile the application-sdk instead of building it using core (from Source). 
-- [ ] Talk about the Wallet and how to configure it.
+- [X] Talk about the Wallet and how to configure it.
 - [X] Notification if the wallet is detected or not
 - [X] Notification if the operator is up or not.
 - [ ] Integration of a pop-up for an easier qr-code launch during the approval step.
 
 
-### Preparing all the necessary pieces of data
-- OrganizationID ?
 
