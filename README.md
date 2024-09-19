@@ -84,7 +84,7 @@ nmp install && node app.mjs
 TODO
 ```
 
-You can observe that everything works by looking at the address specified in the `.env` file (by default, it is `http://localhost:80`).
+You can observe that everything works by looking at the address specified in the `.env` file (by default, it is `http://localhost:3000`).
 Once in your browser, observe the "Operator" and "Wallet" notifications, which should be **green** as shown below:
 
 ![all-checks.png](resources/all-checks.png)
