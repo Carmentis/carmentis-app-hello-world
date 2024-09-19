@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import * as sdk from "./carmentis-application-sdk.js";
 import * as config     from "./config.mjs";
 
-const port = config.APPLICATION_PORT
+
 
 class Message {
     constructor(sender, date, message) {
@@ -21,26 +21,27 @@ let messages = [
 
 
 /*
- * TODO
+ * This map contains the list of messages being sent by users but not yet approved by other users.
  */
 let messageWaitingForApproval = {}
 
+
+// Define the operator URL (domain:port) and initialize the SDK
+const OPERATOR_URL = `${config.CARMENTIS_OPERATOR_HOST}:${config.CARMENTIS_OPERATOR_PORT}`;
 sdk.initialize({
     host: config.CARMENTIS_OPERATOR_HOST,
     port: config.CARMENTIS_OPERATOR_PORT,
 });
 
-const OPERATOR_URL = `${config.CARMENTIS_OPERATOR_HOST}:${config.CARMENTIS_OPERATOR_PORT}`;
 
-// Define the CORS options
-const corsOptions = {
-    origin: ['https://' + config.CARMENTIS_OPERATOR_HOST],
-};
-console.info("CORS Allowed origins:", corsOptions.origin)
-app.use(cors(corsOptions));
+// configure the dependencies (express, body-parser to recover parameters, CORS)
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+    origin: ['https://' + config.CARMENTIS_OPERATOR_HOST],
+}));
 
+// specify folders
 app.set('views', './views')
 app.set("view engine", "pug")
 
@@ -98,7 +99,7 @@ app.post("/submitMessage", async (req, res) => {
             },
             approval: {
                 actor: "sender",
-                message: "receptionMessage"
+                message: "approvalMessage"
             }
         }
 
@@ -113,8 +114,7 @@ app.post("/submitMessage", async (req, res) => {
         return;
     }
 
-    console.log("prepareUserApproval", answer);
-    // TODO: ensure that the anwser contains an identifier and a record identifier
+
     let data_response = answer["data"]
     let id = data_response["id"]
     let recordId = data_response["recordId"]
@@ -148,6 +148,8 @@ app.get("/success", (req, res) => {
     })
 })
 
+// launch node
+const port = config.APPLICATION_PORT
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })

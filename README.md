@@ -57,7 +57,13 @@ the field (**Note: every field's name is case-sensitive**), made it public by cl
 using the `Confirm` button. Once all fields have been declared, you should obtain the following (the order of the variables is not relevant):
 ![carmentis-workspace-application-fields](resources/application-fields.png)
 
-Then, click on `Publish` to finalize the declaration of the application. In the `Overview` section is displayed the 
+
+Then, move to the `Messages` section. These messages are used by Carmentis during the approval step by sending this
+message directly to the user. These messages allow some flexibility but we voluntarily keep the message simple.
+Add a new message by clicking on the `New message` button, put `approvalMessage` as the name of your message, and a message of your choice.
+Suppose we have written `Do you agree?`. To learn more about messages, we refer you to the documentation ([here](https://docs.carmentis.io/docs/application/message)).
+
+Finally, click on `Publish` to finalize the declaration of the application. In the `Overview` section is displayed the 
 ID of your application as well as the version number.
 
 > [!NOTE]
@@ -88,6 +94,17 @@ You can observe that everything works by looking at the address specified in the
 Once in your browser, observe the "Operator" and "Wallet" notifications, which should be **green** as shown below:
 
 ![all-checks.png](resources/all-checks.png)
+
+
+## Hello World Usage
+The Hello World application starts at the default web page consisting of a form block and a list of approved messages.
+In the form, one enters a name (which is not necessarily tied to your real identity) and a message of its choice.
+
+By clicking on the submit button, you will be redirected to the approval web page in which a QR code is shown.
+Using your extension, you will be invited to approve the message you are trying to send. After having followed the instructions,
+if everything goes well, you will be redirected to a "success" web page confirming the approval of your message. 
+Back to the home web page, your message is now displayed, stating that your application has been approved both by the 
+Hello World application and by the operator.
 
 ## ToDo
 - [X] Compile the application-sdk instead of building it using core (from Source). 
