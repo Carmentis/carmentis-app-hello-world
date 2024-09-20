@@ -1,10 +1,19 @@
 #messageForm {
     background-color: #06b57b;
     padding: 10px;
+    color: white;
 }
 
 #messageForm button {
     background-color: white;
+}
+
+.message {
+    margin-bottom: 5px;
+    border-left: 5px solid #06b57b;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 10px;
 }
 
 .sender, .date {

@@ -6,31 +6,33 @@ html
 
         include navbar
 
-        #messageForm.container
-            .form(role='form' method='POST' action='/submitMessage')
-                .row
-                    .col-6
-                        div.form-group
-                            label(for='sender') Sender:
-                            input#sender.form-control(type='text', placeholder='Sender' name='sender' required)
-                    .col-6
-                        div.form-group
-                            label(for='message') Message:
-                            input#message.form-control(type="message", placeholder='Message' name='message' required)
-                .row
-                    .col
-                        button#submit.btn Submit
+        .container.mt-3
+            .row.d-flex
+                .col-3#messageForm
+                    div
+                                h2 Your Message
 
-        .container
-            h2 Messages
-            each msg in messages
-                .message
-                    .row
-                            span= msg.message
-                    .row.justify-content-between.d-flex
-                        .col.sender
-                            span= msg.sender
-                        .col.date.justify-content-end.d-flex
-                            span= msg.date
+                                div.form-group
+                                    label(for='sender') Sender
+                                    input#sender.form-control(type='text', placeholder='Sender' name='sender' required)
+
+                                div.form-group
+                                    label(for='message') Message
+                                    input#message.form-control(type="message", placeholder='Message' name='message' required)
+
+                                button#submit.btn.mt-3.w-100 Submit
+
+                .col-8
+                    h2 Posted Messsages
+
+                    each msg in messages
+                        .message
+                            .row
+                                    span= msg.message
+                            .row.justify-content-between.d-flex
+                                .col.sender
+                                    span= msg.sender
+                                .col.date.justify-content-end.d-flex
+                                    span= msg.date
 
     include scripts

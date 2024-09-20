@@ -16,7 +16,8 @@ class Message {
 }
 
 let messages = [
-    new Message("gael.marcadet@carmentis.io", "21/01/2024", "This message is hardcoded.")
+    new Message("gael.marcadet@carmentis.io", "21/01/2024", "This message is hardcoded."),
+    new Message("gael.marcadet@carmentis.io", "21/01/2024", "This message is also hardcoded.")
 ]
 
 
