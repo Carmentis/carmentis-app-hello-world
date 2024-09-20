@@ -100,18 +100,8 @@ Once in your browser, observe the "Operator" and "Wallet" notifications, which s
 The Hello World application starts at the default web page consisting of a form block and a list of approved messages.
 In the form, one enters a name (which is not necessarily tied to your real identity) and a message of its choice.
 
-By clicking on the submit button, you will be redirected to the approval web page in which a QR code is shown.
-Using your extension, you will be invited to approve the message you are trying to send. After having followed the instructions,
-if everything goes well, you will be redirected to a "success" web page confirming the approval of your message. 
-Back to the home web page, your message is now displayed, stating that your application has been approved both by the 
-Hello World application and by the operator.
-
-## ToDo
-- [X] Compile the application-sdk instead of building it using core (from Source). 
-- [X] Talk about the Wallet and how to configure it.
-- [X] Notification if the wallet is detected or not
-- [X] Notification if the operator is up or not.
-- [ ] Integration of a pop-up for an easier qr-code launch during the approval step.
-
+By clicking on the submit button, an approval popup will show up to ask you to approve your message.
+Following the instruction, the page will be refreshed automatically with your message being displayed.
+Why not looking online to observe your message in the blockchain using the [blochain explorer](https://data.testapps.carmentis.io/explorer)? 
 
 
