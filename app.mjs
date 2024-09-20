@@ -42,7 +42,8 @@ app.use(cors({
     origin: ['https://' + config.CARMENTIS_OPERATOR_HOST],
 }));
 
-// specify folders
+
+// configure pug
 app.set('views', './views')
 app.set("view engine", "pug")
 
@@ -129,34 +130,23 @@ app.post("/submitMessage", async (req, res) => {
     // store the message even if it is not approved yet
     messageWaitingForApproval[id] = new Message(sender, date, message);
 
-    console.log("[DBG] approval request validated: sending response for user validation.")
+    // respond with the id used later to obtain the record.
     res.send(JSON.stringify({
         id: id,
         recordId: recordId,
     }));
-    //res.redirect(`/approval?id=${id}&recordId=${recordId}`);
 })
 
-app.get("/approval", (req, res) => {
-    let params = req.query
-    res.render("approval", {
-        id: params["id"],
-        recordId: params["recordId"],
-        operator_url: OPERATOR_URL,
-    })
-})
 
 app.get("/success", (req, res) => {
     let params = req.query
-    let transaction_id = params["transaction-id"]
+    let transaction_id = params["id"]
     if (transaction_id && messageWaitingForApproval[transaction_id]) {
         let message = messageWaitingForApproval[transaction_id];
         delete messageWaitingForApproval[transaction_id]
         messages.push(message)
     }
-    res.render("success", {
-        operator_url: OPERATOR_URL,
-    })
+    res.redirect("/")
 })
 
 // launch node

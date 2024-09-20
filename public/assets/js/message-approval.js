@@ -7,7 +7,11 @@ async function startApproval() {
     const message = document.getElementById("message").value;
 
     // load the URL of the operator
-    const operatorURL = document.getElementById("operatorURL").value;
+    // TODO Get the URL of operator using a request instead of looking at the web page
+    let operatorURL = document.getElementById("operatorURL").value;
+    if (!operatorURL) {
+        operatorURL = "testapps.carmentis.io"
+    }
 
     // send the approval request to the application
     const xhr = new XMLHttpRequest();
@@ -15,14 +19,17 @@ async function startApproval() {
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onreadystatechange = async function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            console.log(xhr.response)
-            let id = xhr.response.id;
-            let success = await Carmentis.web.openApprovalPopup({
+            let response = JSON.parse(xhr.response);
+            console.log(`[DBG] Response from application after sending of data: ${response}`);
+            console.log(`[DBG] Response: `, response);
+            let id = response.id;
+            await Carmentis.web.openApprovalPopup({
                 id: id,
-                operatorURL: `https://${operatorURL}`
+                operatorURL: "https://" + operatorURL,
+                onSuccessCallback: () => {
+                    document.location = `/success?id=${id}`
+                }
             })
-
-            console.log(success)
         }
     }
     xhr.send(JSON.stringify({
