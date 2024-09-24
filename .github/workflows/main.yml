@@ -14,9 +14,9 @@ jobs:
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
-          port: ${{ secrets.gREMOTE_PORT }}
+          port: ${{ secrets.REMOTE_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "src,."
+          source: "."
           target: "/tmp/carmentis-app-hello-world"
       - name: Build and Run Hello World Application
         uses: appleboy/ssh-action@v0.1.10
@@ -25,4 +25,4 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.REMOTE_PORT }}
-          script: "ls && pwd"
+          script: "ls && pwd && ls /tmp/carmentis-app-hello-world"
