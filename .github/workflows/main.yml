@@ -25,4 +25,4 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.REMOTE_PORT }}
-          script: "cd /tmp/carmentis-app-hello-world && ./build.sh"
+          script: "ls && pwd"
