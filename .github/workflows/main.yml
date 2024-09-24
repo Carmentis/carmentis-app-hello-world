@@ -17,6 +17,7 @@ jobs:
           SOURCE: "."
           TARGET: "/tmp/carmentis-app-hello-world"
           SCRIPT_AFTER: "build.sh"
+          SCRIPT_BEFORE: "ls -al"
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
