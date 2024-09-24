@@ -9,6 +9,7 @@ jobs:
     name: Deploy Hello World Application
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Copy Source to Server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -16,7 +17,7 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           port: ${{ secrets.REMOTE_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "."
+          source: ".,!node_modules"
           target: "/tmp/carmentis-app-hello-world"
       - name: Build and Run Hello World Application
         uses: appleboy/ssh-action@v0.1.10
