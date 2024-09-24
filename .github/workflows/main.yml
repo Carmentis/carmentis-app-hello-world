@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           port: ${{ secrets.gREMOTE_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: ".,!node_modules"
+          source: "*,!node_modules"
           target: "/tmp/carmentis-app-hello-world"
       - name: Build and Run Hello World Application
         uses: appleboy/ssh-action@v0.1.10
