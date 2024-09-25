@@ -5,8 +5,8 @@ on:
     branches: [master]
 
 jobs:
-  deploy:
-    name: Deploy Hello World Application
+  prepare:
+    name: Prepare Hello World Application
     runs-on: ubuntu-latest
     environment: Production
     steps:
@@ -18,6 +18,10 @@ jobs:
           file_name: .env
           fail_on_empty: false
           sort_keys: false
+  deploy:
+    name: Deploy Hello World Application
+    runs-on: ubuntu-latest
+    steps:
       - name: Copy Source to Server
         uses: appleboy/scp-action@v0.1.7
         with:
