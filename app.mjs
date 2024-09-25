@@ -119,6 +119,7 @@ app.post("/submitMessage", async (req, res) => {
     );
 
     if (!answer.success) {
+        console.error("PrepareUserApproval: Query failure: ", answer)
         res.send(JSON.stringify(answer));
         return;
     }

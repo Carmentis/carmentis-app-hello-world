@@ -27,12 +27,12 @@ in the board. Don't worry, in this tutorial and even the others, no signature ke
 completely transparent for you, thanks to the [wallet of Carmentis](https://docs.carmentis.io/).
 
 The wallet of Carmentis takes the form of an extension in your browser, from which every approval steps is based.
-We refer you to the installation guide ([here](https://docs.carmentis.io/docs/wallet)) to install the wallet in your favorite browser.
+We refer you to the installation guide ([here](https://docs.carmentis.io/docs/guide/wallet)) to install the wallet in your favorite browser.
 
 
 ### Step 3: Configuring the Wallet
 Once installed, you have to create your personal account (which is ultimately your signature key pair). Again, we refer
-you to the wallet configuration page in the documentation ([here](https://docs.carmentis.io/docs/wallet/configuration)).
+you to the wallet configuration page in the documentation ([here](https://docs.carmentis.io/docs/guide/wallet#wallet-configuration)).
 To verify that your account has been successfully created, try to authenticate yourself at login page of Carmentis ([here](https://data.testapps.carmentis.io/workspace/sign-in)).
 
 ### Step 4: Create your application in the Carmentis workspace
@@ -63,7 +63,7 @@ using the `Confirm` button. Once all fields have been declared, you should obtai
 Then, move to the `Messages` section. These messages are used by Carmentis during the approval step by sending this
 message directly to the user. These messages allow some flexibility but we voluntarily keep the message simple.
 Add a new message by clicking on the `New message` button, put `approvalMessage` as the name of your message, and a message of your choice.
-Suppose we have written `Do you agree?`. To learn more about messages, we refer you to the documentation ([here](https://docs.carmentis.io/docs/application/message)).
+Suppose we have written `Do you agree?`. To learn more about messages, we refer you to the documentation ([here](https://docs.carmentis.io/docs/guide/your-application/how-to-configure-your-application#messages)).
 
 Finally, click on `Publish` to finalize the declaration of the application. In the `Overview` section is displayed the 
 ID of your application as well as the version number.
@@ -92,7 +92,7 @@ nmp install && node app.mjs
 TODO
 ```
 
-You can observe that everything works by looking at the address specified in the `.env` file (by default, it is `http://localhost:3000`).
+You can observe that everything works by looking at the address specified in the `.env` file (by default, it is `http://localhost:8000`).
 Once in your browser, observe the "Operator" and "Wallet" notifications, which should be **green** as shown below:
 
 ![all-checks.png](resources/all-checks.png)
