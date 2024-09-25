@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Exporting Github environment variables into .env file
+        uses: krisalay/export-env@v1.0.0
+        with:
+          filename: .env
       - name: Copy Source to Server
         uses: appleboy/scp-action@v0.1.7
         with:
