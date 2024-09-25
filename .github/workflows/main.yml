@@ -8,12 +8,13 @@ jobs:
   deploy:
     name: Deploy Hello World Application
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - uses: actions/checkout@v4
       - name: Exporting Github environment variables into .env file
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_APPLICATION_PORT: 8000
+          envkey_APPLICATION_PORT: ${{ vars.APPLICATION_PORT }}
           file_name: .env
           fail_on_empty: false
           sort_keys: false
