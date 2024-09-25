@@ -21,6 +21,7 @@ jobs:
   deploy:
     name: Deploy Hello World Application
     runs-on: ubuntu-latest
+    needs: prepare
     steps:
       - name: Copy Source to Server
         uses: appleboy/scp-action@v0.1.7
