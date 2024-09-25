@@ -1,3 +1,5 @@
+https://github.com/Carmentis/carmentis-app-hello-world/actions/workflows/main.yml/badge.svg
+
 # Carmentis Application Example - Hello World (ExpressJS)
 
 This repository contains the "Hello World" application in Carmentis, written using ExpressJS.
