@@ -10,4 +10,4 @@ docker rm -f "$(docker ps -a -q --filter="ancestor=$IMAGE_NAME")"
 
 # start the docker
 docker build . -t $IMAGE_NAME
-docker run --rm -d --name $CONTAINER_NAME  -p 8000:8000 $IMAGE_NAME
+docker run --rm -d  -p 8000:8000 $IMAGE_NAME
