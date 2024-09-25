@@ -11,7 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Exporting Github environment variables into .env file
-        run: echo "${{vars}}" > .env
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_APPLICATION_PORT: ${{ vars.APPLICATION_PORT }}
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
       - name: Copy Source to Server
         uses: appleboy/scp-action@v0.1.7
         with:
