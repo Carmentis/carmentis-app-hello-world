@@ -6,7 +6,7 @@ CONTAINER_NAME=container-carmentis-app-hello-world
 
 
 # delete existing running containers
-docker kill "$(docker ps -a -q --filter="ancestor=$IMAGE_NAME")"
+docker rm "$(docker ps -a -q --filter="ancestor=$IMAGE_NAME")"
 
 # start the docker
 docker build . -t $IMAGE_NAME
