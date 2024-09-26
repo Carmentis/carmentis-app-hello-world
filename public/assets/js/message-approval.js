@@ -22,7 +22,16 @@ async function startApproval() {
             let response = JSON.parse(xhr.response);
             console.log(`[DBG] Response from application after sending of data: ${response}`);
             console.log(`[DBG] Response: `, response);
+            // stop if the response corresponds to a failure
+            if (!response.success) {
+                throw `Response from /submitMessage indicates a failure: ${response.error}`;
+                return
+            }
+
             let id = response.id;
+            if (!id || !id.includes("-")) {
+                console.error("[DBG] Invalid id returned by the /submitMessage: got", id);
+            }
             await Carmentis.web.openApprovalPopup({
                 id: id,
                 operatorURL: "https://" + operatorURL,
