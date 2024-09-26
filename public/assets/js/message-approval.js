@@ -23,7 +23,7 @@ async function startApproval() {
             console.log(`[DBG] Response from application after sending of data: ${response}`);
             console.log(`[DBG] Response: `, response);
             // stop if the response corresponds to a failure
-            if (!response.success) {
+            if (response.error) {
                 throw `Response from /submitMessage indicates a failure: ${response.error}`;
                 return
             }
