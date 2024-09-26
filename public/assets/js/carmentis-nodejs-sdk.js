@@ -11584,7 +11584,7 @@ async function openApprovalPopup(...args) {
             data: {
                 id: args.id,
             },
-            allowReconnection: true,
+            allowReconnection: false,
             operatorURL: args.operatorURL
         });
 
