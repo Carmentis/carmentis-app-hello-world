@@ -1,7 +1,7 @@
 /**
   Licensed under the Apache License, Version 2.0
   (c)2022-2024 Carmentis SAS
-  Built 2024-09-25T15:59:48.910Z
+  Built 2024-09-27T09:43:32.444Z
   --
   Third party libraries:
   noble-secp256k1 - MIT License (c) 2019 Paul Miller (paulmillr.com)
@@ -774,15 +774,115 @@ function toHexa(array) {
   return [...array].map(n => n.toString(16).toUpperCase().padStart(2, "0")).join("");
 }
 
+/*
+ * Errors code definition (to apply in existing errors code in the future):
+ * - 0... (Generic)
+ * - 4... (Errors coming from users)
+ * - 5... (Errors coming from Carmentis)
+ */
+
+
+// user error (errors coming from users)
+const INVALID_ARGUMENT = 4001; // invalid arguments provided by the user
+
+class CarmentisError extends Error {
+    constructor(errorCode, message) {
+        super(`CarmentisError[${errorCode}] ${message}`);
+    }
+}
+
+class InvalidArgumentError extends CarmentisError {
+    constructor(argumentName, message) {
+        super(INVALID_ARGUMENT, `invalid argument: ${message}`);
+    }
+}
+
+class InvalidArgumentTypeError extends CarmentisError {
+    constructor(argumentName, expectedType, obtainedType) {
+        super(INVALID_ARGUMENT, `invalid type for "${argumentName}": expected ${expectedType}, got ${obtainedType}`);
+    }
+}
+
+class EmptyStringNotAllowedError extends CarmentisError {
+    constructor(argumentName) {
+        super(INVALID_ARGUMENT, `empty string not allowed for ${argumentName}`);
+    }
+}
+
+function checkType( argumentName, expectedType, obtainedType ) {
+    if (expectedType !== obtainedType) {
+        throw new InvalidArgumentTypeError(argumentName, expectedType, obtainedType);
+    }
+}
+
+function checkDefined(argumentName, value) {
+    if (!value) {
+        throw new InvalidArgumentError(argumentName, `Received undefined value`);
+    }
+}
+
+const STRING_FORMATS = {
+    POSITIVE_NUMBER: '^[0-9]+$',
+    NUMBER: '^-?[0-9]+$'
+};
+
+function checkIsString(argumentName, value, args) {
+    checkType( argumentName, "string", typeof value );
+    if (args.empty === false && value === "") {
+        throw new EmptyStringNotAllowedError(argumentName);
+    }
+
+    // check if the provided string respect the provided format
+    if (typeof args.format === "string") {
+        const re = new RegExp(args.format);
+        if (!re.test(value)) {
+            throw new InvalidArgumentError(argumentName, `Should have the following format '${args.format}': got ${value}`);
+        }
+    }
+}
+
+
+function checkIsNumber(argumentName, value, args) {
+    checkType( argumentName, "number", typeof value );
+    if (typeof args.min === "number" && value < args.min) {
+        throw new InvalidArgumentError(argumentName, `Should be at least ${args.min}, got ${value}`);
+    }
+    if (typeof args.max === "number" && args.max < value) {
+        throw new InvalidArgumentError(argumentName, `Should be at most ${args.max}, got ${value}`);
+    }
+}
+
 let config = {},
     crc32Table;
 
 // ============================================================================================================================ //
 //  initialize()                                                                                                                //
 // ============================================================================================================================ //
+/**
+ * Initialize the application SDK.
+ *
+ * @param options Options specifying the hostname and port for the operator.
+ *
+ */
 function initialize(options = {}) {
-  config.operatorHost = options.host;
-  config.operatorPort = options.port;
+    // the host and port should be defined
+    checkDefined("options", options);
+    checkIsString( "options.host", options.host, { empty: false } );
+    if (typeof options.port === "string") {
+        checkIsString( "options.port", options.port, {
+            empty: false,
+            format: STRING_FORMATS.POSITIVE_NUMBER
+        } );
+        options.port = parseInt(options.port);
+    }
+    checkIsNumber( "options.port", options.port, { min: 0, max: 65536 } );
+
+    // the hostname should not contain the protocol (e.g., http or https) at the beginning of the hostname
+    const operatorHost = options.host.replace("http://", "").replace("https://", "");
+
+    // initialize the configuration
+    config.operatorHost = operatorHost;
+    config.operatorPort = options.port;
 }
 
 // ============================================================================================================================ //

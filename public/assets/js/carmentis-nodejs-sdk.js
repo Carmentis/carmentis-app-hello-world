@@ -1,7 +1,7 @@
 /**
   Licensed under the Apache License, Version 2.0
   (c)2022-2024 Carmentis SAS
-  Built 2024-09-25T15:59:41.708Z
+  Built 2024-09-26T12:03:09.274Z
   --
   Third party libraries:
   noble-secp256k1 - MIT License (c) 2019 Paul Miller (paulmillr.com)
@@ -732,12 +732,23 @@ var db = /*#__PURE__*/Object.freeze({
   NODE_STAT: NODE_STAT
 });
 
+/*
+ * Errors code definition (to apply in existing errors code in the future):
+ * - 0... (Generic)
+ * - 4... (Errors coming from users)
+ * - 5... (Errors coming from Carmentis)
+ */
+
 // generic
 const NONE                     = 0x0000;
 const UNKNOWN_ERROR            = 0x0001;
 const NETWORK_ERROR            = 0x0002;
 const MESSAGE_ERROR            = 0x0003;
 const SERVER_ERROR             = 0x0004;
+const INVALID_ARGUMENT_ERROR             = 4001;
+
+// user error (errors coming from users)
+const INVALID_ARGUMENT = 4001; // invalid arguments provided by the user
 
 // account
 const INVALID_EMAIL            = 0x0100;
@@ -767,6 +778,8 @@ var errors = /*#__PURE__*/Object.freeze({
   __proto__: null,
   DUPLICATE_EMAIL: DUPLICATE_EMAIL,
   DUPLICATE_PHONE_NUMBER: DUPLICATE_PHONE_NUMBER,
+  INVALID_ARGUMENT: INVALID_ARGUMENT,
+  INVALID_ARGUMENT_ERROR: INVALID_ARGUMENT_ERROR,
   INVALID_BODY_SIZE: INVALID_BODY_SIZE,
   INVALID_EMAIL: INVALID_EMAIL,
   INVALID_HEADER_SIZE: INVALID_HEADER_SIZE,
@@ -5143,6 +5156,38 @@ var dom = /*#__PURE__*/Object.freeze({
   setCookie: setCookie,
   textNode: textNode
 });
+
+class CarmentisError extends Error {
+    constructor(errorCode, message) {
+        super(`CarmentisError[${errorCode}] ${message}`);
+    }
+}
+
+class InvalidArgumentTypeError extends CarmentisError {
+    constructor(argumentName, expectedType, obtainedType) {
+        super(INVALID_ARGUMENT, `invalid type for "${argumentName}": expected ${expectedType}, got ${obtainedType}`);
+    }
+}
+
+class EmptyStringNotAllowedError extends CarmentisError {
+    constructor(argumentName) {
+        super(INVALID_ARGUMENT, `empty string not allowed for ${argumentName}`);
+    }
+}
+
+function checkType( argumentName, expectedType, obtainedType ) {
+    if (expectedType !== obtainedType) {
+        throw new InvalidArgumentTypeError(argumentName, expectedType, obtainedType);
+    }
+}
+
+function checkIsString(argumentName, value, args) {
+    checkType( argumentName, "string", typeof value );
+    if (args.empty === false && value === "") {
+        throw new EmptyStringNotAllowedError(argumentName);
+    }
+    if (typeof args.format === "string" && typeof args.format === "function") ;
+}
 
 /*!
  * Socket.IO v4.7.5
@@ -11460,8 +11505,30 @@ async function dataServerQuery(...arg) {
 
 
 const POPUP_ID = "carmentis-popup-approval";
-async function openApprovalPopup(...args) {
+
+/**
+ * Injects and opens the approval popup.
+ *
+ * This popup displays a QRCode used by the user to approve an event.
+ * The popup also contains a button to launch the Carmentis wallet extension directly.
+ *
+ * Three arguments can be provided as a dict:
+ *  @param args Contains the arguments for the user approval.
+ * - id: The ID of the user approval (sent by the back-end).
+ * - operatorURL: The URL of the operator, used by the wallet to approve the event;
+ * - [Optional] onSuccessCallback: A (synchronous) callback when the popup is closing, useful to show a success message.
+ */
+async function openApprovalPopup(args) {
     console.log("Opening of the approval popup");
+
+    // checks inputs
+    const id = args.id;
+    const operatorURL = args.operatorURL;
+    const onSuccessCallback = args.onSuccessCallback ? args.onSuccessCallback : () => {};
+    checkIsString( "id", id, { empty: false } );
+    checkIsString( "operatorURL", operatorURL, { empty: false } );
+
+
 
 
     // check if the popup is already inserted in the body (may occur when multiple calls to the openPopup function)
@@ -11471,10 +11538,6 @@ async function openApprovalPopup(...args) {
         let popupContent = document.createElement('div');
         popupContent.id = `${POPUP_ID}-container`;
         popupContent.innerHTML = `
-        <script>
-            
-        </script>
-        
         <div id="${POPUP_ID}">
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic%7CGabarito:regular,600%7CInter:regular,500"/>
             <div id="${POPUP_ID}-header">
@@ -11492,7 +11555,7 @@ async function openApprovalPopup(...args) {
                 window.carmentisWallet !== undefined ? 
                     window.carmentisWallet.openPopup(document.querySelector('[data-code]')?.getAttribute('data-code')) : {}
             ); return false">
-                <span>Launch the extension</span>
+                <span id="${POPUP_ID}-footer-text">Launch the extension</span>
             </div>
         </div>
         
@@ -11510,6 +11573,7 @@ async function openApprovalPopup(...args) {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                
                 
                 /* From https://css.glass */
                 background: rgba(200, 200, 200, 0.29);
@@ -11529,6 +11593,7 @@ async function openApprovalPopup(...args) {
                 border-bottom: 1px solid #d8d8d8;
                 justify-content: space-between;
                 align-content: center;
+                transition: all .75s ease-in;
             }
             
             
@@ -11544,6 +11609,7 @@ async function openApprovalPopup(...args) {
                 justify-content: center;
                 align-content: center;
                 flex-wrap: wrap;
+                transition: all .75s ease-in;
             }
             
             #${POPUP_ID}-footer {
@@ -11558,6 +11624,17 @@ async function openApprovalPopup(...args) {
                 font-weight: bold;
                 cursor: pointer;
                 flex-wrap: wrap;
+                transition: all .75s ease-in;
+            }
+            
+            #${POPUP_ID}-header.success, #${POPUP_ID}-body.success {
+                height: 0px;
+                padding: 0;
+                margin: 0;
+            }
+            
+            #${POPUP_ID}-footer.success {
+                height: 200px;
             }
             
             #${POPUP_ID}-footer span {
@@ -11576,19 +11653,42 @@ async function openApprovalPopup(...args) {
 
 
         // start the QR Code
+
+        console.log("[DBG] OpenApprovalPopup: obtained id: ", id);
         const ORGANIZATION_ID = "0000000000000000000000000000000000000000000000000000000000000000";
+
         let answer = await Carmentis.wallet.request({
             qrElementId   : "qr", // QRCode identifier
             type          : "eventApproval",
             organizationId: ORGANIZATION_ID,
             data: {
-                id: args.id,
+                id: id,
             },
             allowReconnection: false,
-            operatorURL: args.operatorURL
+            operatorURL: operatorURL
         });
 
-        console.log("openApprovalPopup response: ", answer);
+        // close the popup on success
+        if (answer.success) {
+            // get the header
+            let header = document.getElementById(`${POPUP_ID}-header`);
+            let body = document.getElementById(`${POPUP_ID}-body`);
+            let footer = document.getElementById(`${POPUP_ID}-footer`);
+            let footerText = document.getElementById(`${POPUP_ID}-footer-text`);
+            header.className += " success";
+            body.className += " success";
+            footer.className += " success";
+            body.innerText = "";
+            footerText.innerText = "Success!";
+
+            // after a short delay, close the popup and call the callback
+            setTimeout(() => {
+                Carmentis.web.closeApprovalPopup();
+
+                onSuccessCallback();
+            }, 1500);
+        }
+
 
         return answer.success
     }
@@ -11605,7 +11705,7 @@ function closeApprovalPopup() {
 
 const web = {
     dom: dom,
-    "openApprovalPopup": async (...args) => await openApprovalPopup(...args),
+    "openApprovalPopup": async (args) => await openApprovalPopup(args),
     "closeApprovalPopup": () => closeApprovalPopup()
 };
 
