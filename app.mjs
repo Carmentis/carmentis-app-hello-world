@@ -6,6 +6,13 @@ import * as sdk from "./carmentis-application-sdk.js";
 import * as config     from "./config.mjs";
 
 
+// halt if the environment does not contain the sufficient variables to run the application properly
+if (!config.CARMENTIS_OPERATOR_HOST) { throw "Undefined operator host!"}
+if (!config.CARMENTIS_OPERATOR_PORT) { throw "Undefined operator port!"}
+if (!config.APPLICATION_PORT) { throw "Undefined application port!"}
+if (!config.CARMENTIS_APPLICATION_ID) { throw "Undefined application id!"}
+if (!config.CARMENTIS_APPLICATION_VERSION) { throw "Undefined application version!"}
+
 
 class Message {
     constructor(sender, date, message) {
