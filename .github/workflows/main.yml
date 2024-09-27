@@ -15,7 +15,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_APPLICATION_PORT: ${{ vars.APPLICATION_PORT }}
-          envkey_CARMENTIS_OPERATOR_URL: ${{ vars.CARMENTIS_OPERATOR_URL }}
+          envkey_CARMENTIS_OPERATOR_HOST: ${{ vars.CARMENTIS_OPERATOR_HOST }}
           envkey_CARMENTIS_OPERATOR_PORT: ${{ vars.CARMENTIS_OPERATOR_PORT }}
           envkey_CARMENTIS_APPLICATION_ID: ${{ vars.CARMENTIS_APPLICATION_ID }}
           envkey_CARMENTIS_APPLICATION_VERSION: ${{ vars.CARMENTIS_APPLICATION_VERSION }}
