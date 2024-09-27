@@ -10,7 +10,7 @@ window.addEventListener("load",  function () {
     let operatorURL = document.getElementById('operatorURL').textContent;
     var xmlHttp = new XMLHttpRequest();
     try {
-        xmlHttp.open("GET", "https://" + operatorURL, false);
+        xmlHttp.open("GET", operatorURL, false);
         xmlHttp.send(null);
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             operatorDetector.className += " found"

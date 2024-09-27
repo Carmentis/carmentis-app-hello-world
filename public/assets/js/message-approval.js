@@ -6,11 +6,10 @@ async function startApproval() {
     const sender = document.getElementById("sender").value;
     const message = document.getElementById("message").value;
 
-    // load the URL of the operator
-    // TODO Get the URL of operator using a request instead of looking at the web page
+    // load the URL of the operator or assign a default URL by default
     let operatorURL = document.getElementById("operatorURL").value;
     if (!operatorURL) {
-        operatorURL = "testapps.carmentis.io"
+        operatorURL = "https://testapps.carmentis.io"
     }
 
     // send the approval request to the application
@@ -20,8 +19,7 @@ async function startApproval() {
     xhr.onreadystatechange = async function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             let response = JSON.parse(xhr.response);
-            console.log(`[DBG] Response from application after sending of data: ${response}`);
-            console.log(`[DBG] Response: `, response);
+
             // stop if the response corresponds to a failure
             if (response.error) {
                 throw `Response from /submitMessage indicates a failure: ${response.error}`;
@@ -34,7 +32,7 @@ async function startApproval() {
             }
             await Carmentis.web.openApprovalPopup({
                 id: id,
-                operatorURL: "https://" + operatorURL,
+                operatorURL: operatorURL,
                 onSuccessCallback: () => {
                     document.location = `/success?id=${id}`
                 }
@@ -52,25 +50,3 @@ document.addEventListener("DOMContentLoaded", () => {
     let submitButton = document.getElementById("submit");
     submitButton.addEventListener("click", startApproval)
 })
-
-/*
-window.onload = async function() {
-    // TODO verifier le nom de la transaction.
-    let id = document.getElementById("transaction-id").textContent;
-    console.log(`Asking approval for id: ${id}`)
-
-    let answer = await Carmentis.wallet.request({
-        qrElementId   : "qr", // QRCode identifier
-        type          : "eventApproval",
-        organizationId: ORGANIZATION_ID,
-        data: {
-            id: id
-        },
-        allowReconnection: true
-    });
-
-    if(answer.success) {
-        window.location = `/success?transaction-id=${id}`
-    }
-}
-*/

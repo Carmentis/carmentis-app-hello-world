@@ -40,7 +40,7 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.use(cors({
-    origin: ['https://' + config.CARMENTIS_OPERATOR_HOST],
+    origin: [config.CARMENTIS_OPERATOR_HOST],
 }));
 
 
